@@ -1,0 +1,30 @@
+* electric-align.el
+
+Insert a certain amout of spaces at once to easily align columns.
+
+一気にスペースを挿入して簡単に桁をそろえる
+
+NOTE: This is an experimental work and needs improvement, in the sense
+that it's not clear that what the word "alignment" means in the real
+examples.
+
+** Screencast
+
+[[screencast.gif]]
+
+** Usage
+
+Put electric-align.el in a "load-path"ed directory, and require this
+script.
+
+: (require 'electric-align)
+
+then call =M-x electric-align-mode= to turn on the mode.
+
+You can also add the function to =prog-mode-hook=, to enable the mode
+in all buffers editing programs.
+
+: (add-hook 'prog-mode-hook 'electric-align-mode)
+
+While =electric-align-mode= is turned on, you can insert a certain
+amount of spaces at once by pressing =SPC= multiple times.
