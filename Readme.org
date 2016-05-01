@@ -10,9 +10,9 @@ examples.
 
 ** Screencast
 
-[[screencast.gif]]
+[[imgs/screencast.gif]]
 
-[[screencast2.gif]]
+[[imgs/screencast2.gif]]
 
 ** Usage
 
