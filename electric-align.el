@@ -318,15 +318,20 @@ BASE-COLUMN must be also alignment."
          (let* ((base-column (current-column))
                 (align-fn
                  (lambda ()
-                   (move-to-column (car electric-align--pending-aligns))
-                   (when (and (memql (char-before) '(?\s ?\t))
-                              (not (memql (char-after) '(?\s \t))))
-                     (push (make-overlay (point) (1- (point))) electric-align--overlays)
-                     (overlay-put
-                      (car electric-align--overlays) 'after-string
-                      (propertize (make-string
-                                   (- base-column (car electric-align--pending-aligns)) ?\s)
-                                  'face 'electric-align-face))))))
+                   (let ((pending-aligns electric-align--pending-aligns))
+                     (while (and pending-aligns
+                                 (< (car pending-aligns) base-column)
+                                 (move-to-column (car pending-aligns))
+                                 (not (and (memql (char-before) '(?\s ?\t))
+                                           (not (memql (char-after) '(?\s \t))))))
+                       (pop pending-aligns))
+                     (when (< (car pending-aligns) base-column)
+                       (push (make-overlay (point) (1- (point))) electric-align--overlays)
+                       (overlay-put
+                        (car electric-align--overlays) 'after-string
+                        (propertize (make-string
+                                     (- base-column (car pending-aligns)) ?\s)
+                                    'face 'electric-align-face)))))))
            (save-excursion
              (dotimes (_ electric-align--active-lines-backward)
                (forward-line -1)

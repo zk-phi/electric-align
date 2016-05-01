@@ -12,6 +12,8 @@ examples.
 
 [[screencast.gif]]
 
+[[screencast2.gif]]
+
 ** Usage
 
 Put electric-align.el in a "load-path"ed directory, and require this
