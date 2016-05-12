@@ -307,7 +307,8 @@ BASE-COLUMN must be also alignment."
                    (electric-align--find-align-columns base-column (looking-at "[^\s\t\n]"))
                    electric-align--active-lines-backward (pop electric-align--pending-aligns)
                    electric-align--active-lines-forward  (pop electric-align--pending-aligns))
-             (when (= base-column (car electric-align--pending-aligns))
+             (when (and electric-align--pending-aligns
+                        (= base-column (car electric-align--pending-aligns)))
                (pop electric-align--pending-aligns))))
          (electric-align-SPC))
         ((null electric-align--pending-aligns)
