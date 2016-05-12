@@ -263,9 +263,9 @@ BASE-COLUMN must be also alignment."
 ;; + the mode
 
 (defvar electric-align--active-lines-backward nil)
-(defvar electric-align--active-lines-forward nil)
-(defvar electric-align--pending-aligns nil)
-(defvar electric-align--overlays nil)
+(defvar electric-align--active-lines-forward  nil)
+(defvar electric-align--pending-aligns        nil)
+(defvar electric-align--overlays              nil)
 
 (defvar electric-align-mode-map
   (let ((kmap (make-sparse-keymap)))
