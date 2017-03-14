@@ -146,7 +146,8 @@
   :group 'electric-align)
 
 (defface electric-align-face
-  '((t (:background "#554444")))
+  '((((background dark)) (:background "#d9c8c8"))
+    (t (:background "#554444")))
   "Face used to highlight uncommitted spaces inserted by
 `electric-align'."
   :group 'electric-align)
