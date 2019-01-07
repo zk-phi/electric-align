@@ -201,23 +201,26 @@ BASE-COLUMN must be also alignment."
                 (when (eolp) (throw 'return nil))
                 ;; 1-1. check `max-column'
                 (when current-aligns
-                  (if (> (car current-aligns) max-column)
-                      ;; move all `current-aligns' to `max-column'
-                      (setq pending-aligns current-aligns
-                            current-aligns nil)
-                    ;; at least one align remains
-                    (let ((ca current-aligns))
-                      (while (and (cdr ca) (<= (cadr ca) max-column))
-                        (setq ca (cdr ca)))
-                      (setq pending-aligns (cdr ca))
-                      (setcdr ca nil))))
+                  (cond ((> (car current-aligns) max-column)
+                         ;; move all `current-aligns' to `active-aligns'
+                         (nconc active-aligns current-aligns)
+                         (setq current-aligns nil))
+                        (t
+                         ;; at least one align remains
+                         (let ((ca current-aligns))
+                           (while (and (cdr ca) (<= (cadr ca) max-column))
+                             (setq ca (cdr ca)))
+                           (nconc active-aligns (cdr ca))
+                           (setcdr ca nil)))))
                 ;; 1-2. check `min-column'
                 (when (and current-aligns (< (car current-aligns) min-column))
                   (setq min-column (car current-aligns))
-                  (let ((ca current-aligns))
+                  (let ((ca         current-aligns)
+                        (new-aligns nil))
                     (while (and ca (< (car ca) min-column))
-                      (push (pop ca) pending-aligns))
-                    (setq current-aligns ca)))
+                      (push (pop ca) new-aligns))
+                    (setq current-aligns ca
+                          active-aligns  (nconc (nreverse new-aligns) active-aligns))))
                 ;; (update max-column)
                 (when (> current-max-column max-column)
                   (setq max-column current-max-column))
