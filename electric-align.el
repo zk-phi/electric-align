@@ -56,82 +56,101 @@
 ;;  0. If the line is empty
 ;;     -> Stop there
 ;;
+;;     [NG]
+;;
+;;       -2: foo foo foo foo
+;;       -1:
+;;        0: foo foo foo foo
+;;
+;;
 ;;  1. Check the number of characters the line has
 ;;     -> If the line has more than `max-column' characters
 ;;        -> If the line has some alignments (\s[^\s]) above `max-column'
-;;           -> Move the alignments to `active-aligns'
-;;        -> Anyway update `max-column'
+;;           -> Add the alignments to `active-aligns'
+;;        -> Update `max-column'
 ;;     -> If the line's first alignments are below `min-column'
-;;        -> Move the alignments to `active-aligns' and update `min-column'
+;;        -> Add the alignments to `active-aligns' and update `min-column'
 ;;
 ;;  2. If the line lacks an alignment listed in `active-aligns'
 ;;     -> If either the next or the last alignment in the line is not listed in `active-aligns'
 ;;        -> Stop there
 ;;
 ;;     [Okay]
-;;              v   o           v
+;;                  v
 ;;       -2: foo foobar          foo
 ;;       -1: foo foo foo foo foo foo
-;;              ^   ^   ^   ^   ^
-;;              o
+;;              o               o
+;;              v
 ;;       -2: foobar
 ;;       -1: foo foo foo foo
-;;              ^   ^   ^
+;;
 ;;     [NG]
-;;              v   o  vo   o   v
+;;                  v   v   v
 ;;       -2: foo foobar foobar   foo
 ;;       -1: foo foo foo foo foo foo
-;;              ^   ^  x^   ^   ^
+;;              o      x        o
 ;;
 ;;  3. If the line has an extra alignment NOT listed in `active-aligns'
-;;     -> If the line lacks either the next or the last alignment in `active-aligns'
+;;     -> If the line lacks either the next or the prior alignment in `active-aligns'
 ;;       -> Stop there
 ;;     -> Otherwise add the alignment to `active-aligns'
 ;;
 ;;     [Okay]
-;;              v   o   o   v
+;;              o   v   v   o
 ;;       -2: foo foo foo foo foo
 ;;       -1: foo foobar      foo
-;;              ^           ^
-;;              v   o   o   o
+;;
+;;              o   v   v   v
 ;;       -2: foo foo foo foo foo
 ;;       -1: foo foobar
-;;              ^
+;;
 ;;     [NG]
-;;              v   o  xo     v
+;;              o   v  xv     o
 ;;       -2: foo foo foo foo   foo
 ;;       -1: foo foobar foobar foo
-;;              ^      ^      ^
+;;
 
 ;; [How this plug-in determines which alignment to use]
 ;;
 ;; 1. Find the last active alignment in this line
 ;;
-;;        v    v    v
-;;    hoge hogehoge  hoge <- concatenated cell
-;;    hoge hoge hoge hoge
-;;    foo  foobar |
-;;        ^
+;;           a    a    a
+;;   -2: hoge hogehoge  hoge <- concatenated cell
+;;   -1: hoge hoge hoge hoge
+;;    0: foo  foobar |
+;;           ^
 ;;
 ;; 2. For each alignments over the alignment found in step 1
 ;;
 ;;  ⅰ. If the alignment is below the current column
 ;;   -> Align all lines other than the current line
 ;;
-;;        v      v    v
-;;    hoge hogehoge    hoge <- *do not modify a concatenated cell*
-;;    hoge hoge   hoge hoge
-;;    foo  foobar |
-;;               ^
+;;           a    a    a
+;;   -2: hoge hogehoge  hoge
+;;   -1: hoge hoge hoge hoge
+;;    0: foo  foobar |
+;;                ^
+;;
+;;           a      a    a
+;;   -2: hoge hogehoge  __hoge <- *do not modify a concatenated cell*
+;;   -1: hoge hoge __hoge hoge
+;;    0: foo  foobar |
+;;                  ^
 ;;
 ;;  ii. If the alignment is over the current column
 ;;   -> Align this line
 ;;
-;;        v    v    v
-;;    hoge hogehoge  hoge
-;;    hoge hoge hoge hoge
-;;    foo  foobar    |
-;;                  ^
+;;           a    a    a
+;;   -2: hoge hogehoge  hoge
+;;   -1: hoge hoge hoge hoge
+;;    0: foo  foobar |
+;;                     ^
+;;
+;;           a    a    a
+;;   -2: hoge hogehoge  hoge
+;;   -1: hoge hoge hoge hoge
+;;    0: foo  foobar    |
+;;                     ^
 
 (require 'cl-lib)
 
