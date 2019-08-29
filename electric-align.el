@@ -222,7 +222,7 @@ BASE-COLUMN must be also alignment."
                 ;; 1-1. check `max-column'
                 (when current-aligns
                   (if (> (car current-aligns) max-column)
-                      ;; move all `current-aligns' to `max-column'
+                      ;; move all `current-aligns' to `pending-aligns'
                       (setq pending-aligns current-aligns
                             current-aligns nil)
                     ;; at least one align remains
