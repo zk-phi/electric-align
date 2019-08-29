@@ -283,6 +283,9 @@ BASE-COLUMN must be also alignment."
 
 ;; + the mode
 
+(defvar electric-align--debug-file "~/.emacs.d/dat/electric-align-debug")
+(defvar electric-align--canceled nil)
+
 (defvar electric-align--active-lines-backward nil)
 (defvar electric-align--active-lines-forward  nil)
 (defvar electric-align--pending-aligns        nil)
@@ -308,7 +311,8 @@ BASE-COLUMN must be also alignment."
     (setq electric-align--pending-aligns        nil
           electric-align--active-lines-forward  nil
           electric-align--active-lines-backward nil
-          electric-align--overlays              nil)))
+          electric-align--overlays              nil
+          electric-align--canceled              nil)))
 
 (defun electric-align-SPC ()
   (interactive)
@@ -334,6 +338,19 @@ BASE-COLUMN must be also alignment."
          (electric-align-SPC))
         ((null electric-align--pending-aligns)
          (electric-align--remove-overlays)
+         (unless electric-align--canceled
+           (when (y-or-n-p "Report this section ? ")
+             (let ((str (buffer-substring (save-excursion
+                                            (ignore-errors (forward-line -3))
+                                            (point))
+                                          (save-excursion
+                                            (ignore-errors (forward-line 3))
+                                            (point)))))
+               (with-temp-buffer
+                 (when (file-exists-p electric-align--debug-file)
+                   (insert-file-contents electric-align--debug-file))
+                 (insert "\n====================\n\n" str)
+                 (write-file electric-align--debug-file)))))
          (insert " "))
         ((< (car electric-align--pending-aligns) (current-column))
          (electric-align--remove-overlays)
