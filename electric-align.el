@@ -340,12 +340,18 @@ BASE-COLUMN must be also alignment."
          (electric-align--remove-overlays)
          (unless electric-align--canceled
            (when (y-or-n-p "Report this section ? ")
-             (let ((str (buffer-substring (save-excursion
-                                            (ignore-errors (forward-line -3))
-                                            (point))
-                                          (save-excursion
-                                            (ignore-errors (forward-line 3))
-                                            (point)))))
+             (let ((str (concat
+                         (buffer-substring
+                          (save-excursion
+                            (ignore-errors (forward-line -3))
+                            (point))
+                          (point))
+                         "|"
+                         (buffer-substring
+                          (point)
+                          (save-excursion
+                            (ignore-errors (forward-line 3))
+                            (point))))))
                (with-temp-buffer
                  (when (file-exists-p electric-align--debug-file)
                    (insert-file-contents electric-align--debug-file))
