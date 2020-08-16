@@ -18,7 +18,7 @@
 
 ;; Version: 2.0.0beta
 ;; Author: zk_phi
-;; URL: http://hins11.yu-yake.com/
+;; URL: http://zk-phi.gitub.io/
 
 ;;; Commentary:
 
