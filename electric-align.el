@@ -196,7 +196,7 @@ columns (smallest first) of this line above the current
 column (including the current column). *THIS FUNCTION MAY MOVE
 THE POINT inside the line*"
   (let ((eol (point-at-eol)) (aligns nil))
-    (when (and (looking-back "[\s\t]\\|^") (looking-at "[^\s\t\n]"))
+    (when (and (looking-back "[\s\t]\\|^" (max 1 (1- (point)))) (looking-at "[^\s\t\n]"))
       (push (current-column) aligns))
     (while (search-forward-regexp "[\s\t][^\s\t]" eol t)
       (push (1- (current-column)) aligns))
