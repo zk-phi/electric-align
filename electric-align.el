@@ -162,6 +162,7 @@
 
 (defcustom electric-align-shortcut-commands nil
   "Extra list of commands counted as SPC."
+  :type '(list symbol)
   :group 'electric-align)
 
 (defface electric-align-face
