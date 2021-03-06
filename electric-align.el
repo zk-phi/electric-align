@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;; electric-align.el --- Insert a certain amout of spaces at once to easily align columns
 
 ;; Copyright (C) 2015- zk_phi
